@@ -1,0 +1,149 @@
+// Board Master - Simplified MVP Schema
+// Based on docs/DATA_MODELS.md with all simplifications applied
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// TUTOR MODEL
+// ============================================================================
+model Tutor {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  fullName      String    @map("full_name")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  learners      Learner[]
+
+  @@map("tutors")
+}
+
+// ============================================================================
+// LEARNER MODEL (SIMPLIFIED - No profile_type, No current_level)
+// ============================================================================
+model Learner {
+  id           String    @id @default(uuid())
+  tutorId      String    @map("tutor_id")
+  displayName  String    @map("display_name")
+  pinCode      String    @map("pin_code") // 4 digits, stored as string
+  totalPoints  Int       @default(0) @map("total_points")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  tutor             Tutor             @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  weeklyCycles      WeeklyCycle[]
+  taskCompletions   TaskCompletion[]
+
+  @@map("learners")
+  @@index([tutorId])
+}
+
+// ============================================================================
+// WEEKLY CYCLE MODEL
+// ============================================================================
+model WeeklyCycle {
+  id                String    @id @default(uuid())
+  learnerId         String    @map("learner_id")
+  startDate         DateTime  @map("start_date") @db.Date
+  endDate           DateTime  @map("end_date") @db.Date
+  status            CycleStatus @default(DRAFT)
+  tutorReviewedAt   DateTime? @map("tutor_reviewed_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  learner           Learner           @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  tasks             Task[]
+  taskCompletions   TaskCompletion[]
+
+  @@map("weekly_cycles")
+  @@index([learnerId, startDate])
+  @@index([status])
+}
+
+enum CycleStatus {
+  DRAFT      // Tutor creating tasks
+  ACTIVE     // Learner can complete tasks
+  REVIEW     // Week ended, tutor reviewing
+  COMPLETED  // Review finished
+}
+
+// ============================================================================
+// TASK MODEL (SIMPLIFIED - No task_type enum, Fixed point_value, Added expectation)
+// ============================================================================
+model Task {
+  id                String    @id @default(uuid())
+  weeklyCycleId     String    @map("weekly_cycle_id")
+  title             String    // Max 50 chars (validation in app)
+  description       String?   // Optional, max 200 chars
+  iconName          String?   @map("icon_name") // Icon identifier
+  pointValue        Int       @default(10) @map("point_value") // FIXED: 10 for regular, 0 for boss
+  frequencyPerWeek  Int       @map("frequency_per_week") // 1-14
+  isBossTask        Boolean   @default(false) @map("is_boss_task") // Boss vs Regular
+  expectation       String?   // NEW: "What does done look like?" (max 200 chars)
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  weeklyCycle       WeeklyCycle       @relation(fields: [weeklyCycleId], references: [id], onDelete: Cascade)
+  completions       TaskCompletion[]
+
+  @@map("tasks")
+  @@index([weeklyCycleId])
+  @@index([isBossTask])
+}
+
+// ============================================================================
+// TASK COMPLETION MODEL
+// ============================================================================
+model TaskCompletion {
+  id              String    @id @default(uuid())
+  taskId          String    @map("task_id")
+  learnerId       String    @map("learner_id")
+  weeklyCycleId   String    @map("weekly_cycle_id")
+  completedAt     DateTime  @default(now()) @map("completed_at")
+  tutorApproved   Boolean?  @map("tutor_approved") // null = pending, true = approved, false = rejected
+  pointsAwarded   Int       @default(0) @map("points_awarded") // Actual points given after review
+  tutorNotes      String?   @map("tutor_notes") // Optional feedback from tutor
+
+  // Relations
+  task            Task          @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  learner         Learner       @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  weeklyCycle     WeeklyCycle   @relation(fields: [weeklyCycleId], references: [id], onDelete: Cascade)
+
+  @@map("task_completions")
+  @@index([taskId])
+  @@index([learnerId])
+  @@index([weeklyCycleId])
+  @@index([tutorApproved])
+}
+
+// ============================================================================
+// CONSTRAINTS & RULES (Enforced in application logic)
+// ============================================================================
+// Level 1 Limits (MVP - Hidden from UI):
+// - MAX_WEEKLY_TASKS = 12
+// - MAX_BOSS_TASKS = 2
+// - BOSS_UNLOCK_THRESHOLD = 0.80 (by task count)
+//
+// Point Value Rules:
+// - Regular tasks: Always 10 points (not editable)
+// - Boss tasks: Always 0 points (not editable)
+//
+// Task Locking Rules:
+// - Tasks cannot be edited once weekly_cycle.status = ACTIVE
+// - Tutor must "End Week Early" to make changes
+//
+// Progress Calculation:
+// - total_task_completions_needed = SUM(task.frequency_per_week WHERE is_boss_task = false)
+// - total_tasks_completed = COUNT(task_completions WHERE is_boss_task = false)
+// - completion_text = "{total_tasks_completed} of {total_task_completions_needed} tasks done!"
+// - boss_unlocked = (total_tasks_completed / total_task_completions_needed) >= 0.80

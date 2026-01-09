@@ -1,0 +1,266 @@
+/**
+ * Board Master - Global Styles
+ * Child-safe design tokens based on docs/SCREEN_STRUCTURE.md
+ */
+
+@import "tailwindcss";
+
+:root {
+  /* ========================================================================
+   * COLOR PALETTE - High Contrast (WCAG AAA Compliant)
+   * ======================================================================== */
+
+  /* Primary colors */
+  --color-primary: #2563eb; /* Blue - Primary actions */
+  --color-primary-hover: #1d4ed8;
+  --color-primary-light: #dbeafe;
+
+  /* Success/Progress colors */
+  --color-success: #16a34a; /* Green - Completed */
+  --color-success-light: #dcfce7;
+
+  /* Warning/Progress colors */
+  --color-warning: #ca8a04; /* Yellow - In progress */
+  --color-warning-light: #fef9c3;
+
+  /* Danger/Alert colors */
+  --color-danger: #dc2626; /* Red - Low progress */
+  --color-danger-light: #fee2e2;
+
+  /* Boss/Special colors */
+  --color-gold: #f59e0b; /* Gold - Boss tasks unlocked */
+  --color-gold-light: #fef3c7;
+
+  /* Neutral colors */
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-700: #374151;
+  --color-gray-900: #111827;
+
+  /* ========================================================================
+   * TYPOGRAPHY - Child-Safe Font Sizes
+   * ======================================================================== */
+
+  /* Minimum 18px body text for children */
+  --font-size-base: 1.125rem; /* 18px */
+  --font-size-large: 1.5rem; /* 24px - Task titles, headings */
+  --font-size-xlarge: 1.75rem; /* 28px - Progress text */
+  --font-size-small: 1rem; /* 16px - Secondary text */
+
+  /* Line heights for readability */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ========================================================================
+   * SPACING - Large Touch Targets
+   * ======================================================================== */
+
+  --spacing-touch-min: 3.75rem; /* 60px - Minimum touch target */
+  --spacing-touch-comfortable: 5rem; /* 80px - Comfortable touch target */
+  --spacing-card-padding: 1.25rem; /* 20px */
+  --spacing-section: 2rem; /* 32px */
+
+  /* ========================================================================
+   * BORDER RADIUS - Friendly, Rounded Corners
+   * ======================================================================== */
+
+  --radius-small: 0.5rem; /* 8px */
+  --radius-medium: 0.75rem; /* 12px */
+  --radius-large: 1rem; /* 16px */
+  --radius-full: 9999px; /* Circular */
+
+  /* ========================================================================
+   * SHADOWS - Subtle Depth
+   * ======================================================================== */
+
+  --shadow-small: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-large: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+  /* ========================================================================
+   * ANIMATIONS - Gentle, Not Overwhelming
+   * ======================================================================== */
+
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+}
+
+/* NO dark mode in MVP - consistent experience for children */
+
+@theme inline {
+  /* Map CSS variables to Tailwind theme */
+  --color-primary: var(--color-primary);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-gold: var(--color-gold);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+}
+
+/* ============================================================================
+ * BASE STYLES
+ * ============================================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Prevent text size adjustment on mobile */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+ * ACCESSIBILITY
+ * ============================================================================ */
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Hide elements visually but keep for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================================================
+ * CHILD-SAFE BUTTON STYLES
+ * ============================================================================ */
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* Minimum touch target size enforcement */
+.btn {
+  min-height: var(--spacing-touch-min);
+  min-width: var(--spacing-touch-min);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-medium);
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Large buttons for learners (80px height) */
+.btn-large {
+  min-height: var(--spacing-touch-comfortable);
+  font-size: var(--font-size-large);
+  padding: 1rem 2rem;
+}
+
+/* ============================================================================
+ * PROGRESS BAR COLORS (Count-based)
+ * ============================================================================ */
+
+.progress-bar-red {
+  background-color: var(--color-danger);
+}
+
+.progress-bar-yellow {
+  background-color: var(--color-warning);
+}
+
+.progress-bar-green {
+  background-color: var(--color-success);
+}
+
+.progress-bar-gold {
+  background-color: var(--color-gold);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+/* ============================================================================
+ * ANIMATIONS
+ * ============================================================================ */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* ============================================================================
+ * UTILITY CLASSES
+ * ============================================================================ */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
