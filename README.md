@@ -253,3 +253,4 @@ Designed and developed by Rodrigo Seoane with AI assistance from Claude Sonnet 4
 ---
 
 **Built with ❤️ for kids aged 6-9 to develop healthy habits**
+# task-manager
