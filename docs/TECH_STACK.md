@@ -259,7 +259,7 @@ DATABASE_URL="postgresql://..."
 DIRECT_URL="postgresql://..." # For migrations
 
 # Auth
-NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_URL="http://localhost:3002"
 NEXTAUTH_SECRET="..." # Generated random string
 
 # Supabase (optional, if using Supabase auth)
@@ -399,7 +399,7 @@ pnpm dev
 
 ### Key Commands
 ```bash
-pnpm dev          # Start Next.js dev server (localhost:3000)
+pnpm dev          # Start Next.js dev server (localhost:3002)
 pnpm build        # Production build
 pnpm start        # Start production server
 pnpm lint         # Run ESLint
