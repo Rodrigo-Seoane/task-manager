@@ -207,7 +207,7 @@ export function LearnerCard({ learner }: LearnerCardProps) {
       {/* Actions - Enhanced button */}
       <div>
         <Link
-          href={`/tutor/learners/${learner.id}`}
+          href={`/tutor/weekly-tasks/${learner.id}`}
           className="flex-1 text-center transition-colors"
           style={{
             backgroundColor: "var(--color-navy-500)",
@@ -228,7 +228,7 @@ export function LearnerCard({ learner }: LearnerCardProps) {
             e.currentTarget.style.backgroundColor = "var(--color-navy-500)";
           }}
         >
-          View Details
+          Manage Tasks
         </Link>
       </div>
 
