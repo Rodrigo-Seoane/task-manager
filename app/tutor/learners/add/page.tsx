@@ -1,6 +1,12 @@
 /**
  * Add Learner Page
  * Route: /tutor/learners/add
+ *
+ * UI REDESIGN CHANGES:
+ * - Used explicit spacing tokens (--space-10, --space-8, --space-6)
+ * - Used explicit radius tokens (--radius-lg, --radius-md)
+ * - Improved spacing hierarchy for header and form
+ * - Enhanced info box styling with better visual separation
  */
 
 import { redirect } from "next/navigation";
@@ -46,17 +52,22 @@ export default async function AddLearnerPage() {
       {/* Navigation */}
       <Navigation tutorName={tutor.fullName} />
 
-      {/* Main Content */}
-      <main className="max-w-3xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
+      {/* Main Content - Enhanced spacing */}
+      <main
+        className="max-w-3xl mx-auto"
+        style={{
+          padding: "var(--space-10) var(--space-6)",
+        }}
+      >
+        {/* Header - Increased spacing */}
+        <div style={{ marginBottom: "var(--space-10)" }}>
           <h1
-            className="mb-2"
             style={{
               fontFamily: "var(--font-family-display)",
               fontSize: "var(--font-size-h1)",
               lineHeight: "var(--line-height-h1)",
               color: "var(--color-navy-800)",
+              marginBottom: "var(--space-3)",
             }}
           >
             Add New Learner
@@ -65,47 +76,55 @@ export default async function AddLearnerPage() {
             style={{
               fontSize: "var(--font-size-body)",
               color: "var(--color-grey-600)",
+              fontFamily: "var(--font-family-body)",
             }}
           >
             Set up a new learner account with a unique PIN
           </p>
         </div>
 
-        {/* Form Card */}
+        {/* Form Card - Using explicit tokens */}
         <div
-          className="rounded-lg p-8"
           style={{
             backgroundColor: "white",
             boxShadow: "var(--shadow-md)",
+            borderRadius: "var(--radius-lg)",
+            padding: "var(--space-10)",
           }}
         >
           <AddLearnerForm />
         </div>
 
-        {/* Info Box */}
+        {/* Info Box - Enhanced with proper spacing */}
         <div
-          className="mt-6 rounded-lg p-4"
           style={{
             backgroundColor: "var(--color-info-100)",
             border: "1px solid var(--color-info-300)",
+            borderRadius: "var(--radius-md)",
+            padding: "var(--space-5)",
+            marginTop: "var(--space-8)",
           }}
         >
           <h3
-            className="mb-2"
             style={{
               fontSize: "var(--font-size-h6)",
               fontWeight: "var(--font-weight-semibold)",
               color: "var(--color-info-400)",
+              fontFamily: "var(--font-family-body)",
+              marginBottom: "var(--space-3)",
             }}
           >
             About Learner Accounts
           </h3>
           <ul
-            className="space-y-1"
             style={{
               fontSize: "var(--font-size-small)",
               color: "var(--color-info-400)",
-              paddingLeft: "20px",
+              fontFamily: "var(--font-family-body)",
+              paddingLeft: "var(--space-5)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--space-2)",
             }}
           >
             <li>Each learner gets their own account with a 4-digit PIN</li>

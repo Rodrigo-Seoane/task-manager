@@ -1,71 +1,95 @@
 /**
  * Board Master - Home Page
  * Landing page with links to tutor and learner portals
+ *
+ * UI REDESIGN CHANGES:
+ * - Increased vertical spacing using 8px grid (--space-16, --space-8)
+ * - Used explicit radius tokens (--radius-lg for cards, --radius-pill for icons)
+ * - Improved visual hierarchy with larger icon containers (96px, child-friendly touch target)
+ * - Added transition tokens for consistent animation
+ * - Increased spacing between elements for better breathing room
+ * - Made CTAs more prominent with better contrast and spacing
+ * - Hover states handled via inline CSS for server component compatibility
  */
 
 import Link from "next/link";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ backgroundColor: "var(--color-mist-50)" }}
+      className="min-h-screen flex items-center justify-center"
+      style={{
+        backgroundColor: "var(--color-mist-50)",
+        padding: "var(--space-6)",
+      }}
     >
+
       <div className="max-w-4xl w-full text-center">
-        {/* Logo/Title */}
+        {/* Logo/Title - Increased bottom spacing */}
         <h1
-          className="mb-4"
           style={{
             fontFamily: "var(--font-family-display)",
             fontSize: "var(--font-size-display)",
             lineHeight: "var(--line-height-display)",
             color: "var(--color-navy-800)",
+            marginBottom: "var(--space-4)",
           }}
         >
           Board Master
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle - Increased bottom spacing for relaxed rhythm */}
         <p
-          className="mb-12"
           style={{
             fontSize: "var(--font-size-h4)",
             color: "var(--color-grey-600)",
             fontFamily: "var(--font-family-body)",
+            marginBottom: "var(--space-16)",
           }}
         >
           Gamified task management for learners
         </p>
 
-        {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          {/* Tutor Card */}
+        {/* Action Cards - Increased gap for better visual separation */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 max-w-2xl mx-auto"
+          style={{ gap: "var(--space-8)" }}
+        >
+          {/* Tutor Card - Enhanced with better hover states and spacing */}
           <Link
             href="/tutor/login"
-            className="rounded-lg p-8 transition-all hover:shadow-lg"
+            className={styles.portalCard}
             style={{
               backgroundColor: "white",
               boxShadow: "var(--shadow-md)",
               border: "2px solid var(--color-navy-500)",
+              borderRadius: "var(--radius-lg)",
+              padding: "var(--space-10)",
+              display: "block",
             }}
           >
+            {/* Icon Container - Larger for better visibility (child-friendly) */}
             <div
-              className="rounded-full mx-auto mb-4 flex items-center justify-center"
+              className="flex items-center justify-center mx-auto"
               style={{
-                width: "80px",
-                height: "80px",
+                width: "96px",
+                height: "96px",
                 backgroundColor: "var(--color-navy-100)",
-                fontSize: "40px",
+                borderRadius: "var(--radius-pill)",
+                fontSize: "48px",
+                marginBottom: "var(--space-6)",
               }}
             >
               👨‍🏫
             </div>
             <h2
-              className="mb-2"
               style={{
                 fontSize: "var(--font-size-h3)",
                 fontWeight: "var(--font-weight-semibold)",
                 color: "var(--color-navy-800)",
+                marginBottom: "var(--space-3)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               Tutor Portal
@@ -74,39 +98,47 @@ export default function Home() {
               style={{
                 fontSize: "var(--font-size-body)",
                 color: "var(--color-grey-600)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               Manage learners and create weekly tasks
             </p>
           </Link>
 
-          {/* Learner Card */}
+          {/* Learner Card - Enhanced with better hover states and spacing */}
           <Link
             href="/learner/select"
-            className="rounded-lg p-8 transition-all hover:shadow-lg"
+            className={styles.portalCard}
             style={{
               backgroundColor: "white",
               boxShadow: "var(--shadow-md)",
               border: "2px solid var(--color-peach-500)",
+              borderRadius: "var(--radius-lg)",
+              padding: "var(--space-10)",
+              display: "block",
             }}
           >
+            {/* Icon Container - Larger for better visibility (child-friendly) */}
             <div
-              className="rounded-full mx-auto mb-4 flex items-center justify-center"
+              className="flex items-center justify-center mx-auto"
               style={{
-                width: "80px",
-                height: "80px",
+                width: "96px",
+                height: "96px",
                 backgroundColor: "var(--color-peach-100)",
-                fontSize: "40px",
+                borderRadius: "var(--radius-pill)",
+                fontSize: "48px",
+                marginBottom: "var(--space-6)",
               }}
             >
               🎮
             </div>
             <h2
-              className="mb-2"
               style={{
                 fontSize: "var(--font-size-h3)",
                 fontWeight: "var(--font-weight-semibold)",
                 color: "var(--color-navy-800)",
+                marginBottom: "var(--space-3)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               Learner Portal
@@ -115,6 +147,7 @@ export default function Home() {
               style={{
                 fontSize: "var(--font-size-body)",
                 color: "var(--color-grey-600)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               Complete tasks and track your progress
@@ -122,11 +155,14 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Footer Info */}
-        <div className="mt-12">
+        {/* Footer Info - Increased top spacing */}
+        <div style={{ marginTop: "var(--space-16)" }}>
           <p
-            className="text-sm"
-            style={{ color: "var(--color-grey-500)" }}
+            style={{
+              fontSize: "var(--font-size-small)",
+              color: "var(--color-grey-500)",
+              fontFamily: "var(--font-family-body)",
+            }}
           >
             Phase 2: Tutor Onboarding Complete
           </p>

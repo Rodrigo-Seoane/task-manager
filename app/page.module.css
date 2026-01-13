@@ -1,0 +1,9 @@
+/* Home Page Styles */
+.portalCard {
+  transition: all var(--transition-normal);
+}
+
+.portalCard:hover {
+  box-shadow: var(--shadow-lg) !important;
+  transform: translateY(-4px);
+}

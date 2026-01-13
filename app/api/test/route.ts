@@ -1,6 +1,6 @@
 /**
  * Test API Route - Verify Prisma Connection
- * Access at: http://localhost:3001/api/test
+ * Access at: http://localhost:3002/api/test
  */
 
 import { NextResponse } from "next/server";

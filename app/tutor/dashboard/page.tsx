@@ -2,6 +2,14 @@
  * Tutor Dashboard Page
  * Route: /tutor/dashboard
  * Main landing page for tutors after login
+ *
+ * UI REDESIGN CHANGES:
+ * - Used explicit spacing tokens (--space-8, --space-10, --space-6)
+ * - Used explicit radius tokens (--radius-lg, --radius-md, --radius-pill)
+ * - Increased button height for better touch targets (48px = --space-12)
+ * - Added hover state for primary CTA button
+ * - Improved grid gap for better visual separation
+ * - Enhanced empty state with larger icon and better spacing
  */
 
 import { redirect } from "next/navigation";
@@ -10,6 +18,7 @@ import { prisma } from "@/lib/prisma";
 import { Navigation } from "@/components/tutor/Navigation";
 import { LearnerCard } from "@/components/tutor/LearnerCard";
 import Link from "next/link";
+import styles from "./page.module.css";
 
 export default async function TutorDashboardPage() {
   const session = await auth();
@@ -124,17 +133,22 @@ export default async function TutorDashboardPage() {
       {/* Navigation */}
       <Navigation tutorName={tutor.fullName} />
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
+      {/* Main Content - Enhanced spacing */}
+      <main
+        className="max-w-7xl mx-auto"
+        style={{
+          padding: "var(--space-10) var(--space-6)",
+        }}
+      >
+        {/* Header - Increased bottom spacing */}
+        <div style={{ marginBottom: "var(--space-10)" }}>
           <h1
-            className="mb-2"
             style={{
               fontFamily: "var(--font-family-display)",
               fontSize: "var(--font-size-h1)",
               lineHeight: "var(--line-height-h1)",
               color: "var(--color-navy-800)",
+              marginBottom: "var(--space-3)",
             }}
           >
             Dashboard
@@ -143,18 +157,19 @@ export default async function TutorDashboardPage() {
             style={{
               fontSize: "var(--font-size-body)",
               color: "var(--color-grey-600)",
+              fontFamily: "var(--font-family-body)",
             }}
           >
             Manage your learners and their weekly tasks
           </p>
         </div>
 
-        {/* Add Learner Button */}
+        {/* Add Learner Button - Enhanced with hover and proper sizing */}
         {canAddMore && (
-          <div className="mb-6">
+          <div style={{ marginBottom: "var(--space-8)" }}>
             <Link
               href="/tutor/learners/add"
-              className="inline-block px-6 py-3 rounded-lg transition-all"
+              className={styles.addLearnerButton}
               style={{
                 backgroundColor: "var(--color-peach-500)",
                 color: "white",
@@ -162,6 +177,12 @@ export default async function TutorDashboardPage() {
                 fontFamily: "var(--font-family-body)",
                 fontWeight: "var(--font-weight-semibold)",
                 boxShadow: "var(--shadow-sm)",
+                padding: "var(--space-3) var(--space-6)",
+                borderRadius: "var(--radius-md)",
+                textDecoration: "none",
+                height: "var(--space-12)",
+                display: "inline-flex",
+                alignItems: "center",
               }}
             >
               + Add Learner
@@ -169,61 +190,77 @@ export default async function TutorDashboardPage() {
           </div>
         )}
 
-        {/* Learners Grid */}
+        {/* Learners Grid - Enhanced gap for better visual separation */}
         {hasLearners ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            style={{ gap: "var(--space-8)" }}
+          >
             {learners.map((learner) => (
               <LearnerCard key={learner.id} learner={learner} />
             ))}
           </div>
         ) : (
-          /* Empty State */
+          /* Empty State - Enhanced with better spacing and larger icon */
           <div
-            className="rounded-lg p-12 text-center"
+            className="text-center"
             style={{
               backgroundColor: "white",
               boxShadow: "var(--shadow-md)",
+              borderRadius: "var(--radius-lg)",
+              padding: "var(--space-16)",
             }}
           >
+            {/* Larger icon container for better visibility */}
             <div
-              className="rounded-full mx-auto mb-4 flex items-center justify-center"
+              className="flex items-center justify-center mx-auto"
               style={{
-                width: "80px",
-                height: "80px",
+                width: "120px",
+                height: "120px",
                 backgroundColor: "var(--color-mist-100)",
-                fontSize: "40px",
+                borderRadius: "var(--radius-pill)",
+                fontSize: "56px",
+                marginBottom: "var(--space-6)",
               }}
             >
               👥
             </div>
             <h3
-              className="mb-2"
               style={{
                 fontSize: "var(--font-size-h3)",
                 fontWeight: "var(--font-weight-semibold)",
                 color: "var(--color-navy-800)",
+                fontFamily: "var(--font-family-body)",
+                marginBottom: "var(--space-3)",
               }}
             >
               No learners yet
             </h3>
             <p
-              className="mb-6"
               style={{
                 fontSize: "var(--font-size-body)",
                 color: "var(--color-grey-600)",
+                fontFamily: "var(--font-family-body)",
+                marginBottom: "var(--space-8)",
               }}
             >
               Add your first learner to get started with Board Master
             </p>
             <Link
               href="/tutor/learners/add"
-              className="inline-block px-6 py-3 rounded-lg transition-all"
+              className={styles.emptyStateButton}
               style={{
                 backgroundColor: "var(--color-navy-500)",
                 color: "white",
                 fontSize: "var(--font-size-body)",
                 fontFamily: "var(--font-family-body)",
-                fontWeight: "var(--font-weight-medium)",
+                fontWeight: "var(--font-weight-semibold)",
+                padding: "var(--space-3) var(--space-6)",
+                borderRadius: "var(--radius-md)",
+                textDecoration: "none",
+                height: "var(--space-12)",
+                display: "inline-flex",
+                alignItems: "center",
               }}
             >
               Add Your First Learner

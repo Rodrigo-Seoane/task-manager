@@ -3,6 +3,14 @@
 /**
  * Tutor Login Form Component
  * Form with validation for tutor authentication
+ *
+ * UI REDESIGN CHANGES:
+ * - Used explicit spacing tokens (--space-6 for form fields)
+ * - Used explicit radius tokens (--radius-md for inputs, alerts, and buttons)
+ * - Improved input height for better touch targets (48px = --space-12)
+ * - Added hover/focus states for better interactivity
+ * - Increased label spacing and weight for better hierarchy
+ * - Enhanced button states with proper transitions
  */
 
 import { useState, Suspense } from "react";
@@ -78,41 +86,53 @@ function TutorLoginFormInner() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Success Message */}
+    <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+      {/* Success Message - Enhanced with explicit tokens */}
       {registered && (
         <div
-          className="rounded-lg p-4 text-sm"
           style={{
             backgroundColor: "var(--color-success-100)",
             color: "var(--color-success-400)",
             border: "1px solid var(--color-success-300)",
+            borderRadius: "var(--radius-md)",
+            padding: "var(--space-4)",
+            fontSize: "var(--font-size-small)",
+            fontFamily: "var(--font-family-body)",
           }}
         >
           Account created successfully! Please log in.
         </div>
       )}
 
-      {/* Server Error */}
+      {/* Server Error - Enhanced with explicit tokens */}
       {serverError && (
         <div
-          className="rounded-lg p-4 text-sm"
           style={{
             backgroundColor: "var(--color-error-100)",
             color: "var(--color-error-400)",
             border: "1px solid var(--color-error-300)",
+            borderRadius: "var(--radius-md)",
+            padding: "var(--space-4)",
+            fontSize: "var(--font-size-small)",
+            fontFamily: "var(--font-family-body)",
           }}
         >
           {serverError}
         </div>
       )}
 
-      {/* Email */}
+      {/* Email - Enhanced spacing and touch targets */}
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium mb-2"
-          style={{ color: "var(--color-grey-700)" }}
+          style={{
+            display: "block",
+            fontSize: "var(--font-size-small)",
+            fontWeight: "var(--font-weight-semibold)",
+            color: "var(--color-grey-700)",
+            marginBottom: "var(--space-2)",
+            fontFamily: "var(--font-family-body)",
+          }}
         >
           Email
         </label>
@@ -121,7 +141,7 @@ function TutorLoginFormInner() {
           type="email"
           {...register("email")}
           disabled={isLoading}
-          className="w-full px-4 py-3 rounded-lg border transition-colors"
+          className="w-full border transition-colors"
           style={{
             borderColor: errors.email
               ? "var(--color-error-300)"
@@ -129,25 +149,50 @@ function TutorLoginFormInner() {
             backgroundColor: "var(--color-grey-50)",
             fontSize: "var(--font-size-body)",
             fontFamily: "var(--font-family-body)",
+            padding: "var(--space-3) var(--space-4)",
+            borderRadius: "var(--radius-md)",
+            height: "var(--space-12)",
+            outline: "none",
+            transition: "all var(--transition-fast)",
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = "var(--color-navy-500)";
+            e.currentTarget.style.backgroundColor = "white";
+          }}
+          onBlur={(e) => {
+            if (!errors.email) {
+              e.currentTarget.style.borderColor = "var(--color-grey-300)";
+              e.currentTarget.style.backgroundColor = "var(--color-grey-50)";
+            }
           }}
           placeholder="your@email.com"
         />
         {errors.email && (
           <p
-            className="mt-1 text-sm"
-            style={{ color: "var(--color-error-400)" }}
+            style={{
+              marginTop: "var(--space-2)",
+              fontSize: "var(--font-size-small)",
+              color: "var(--color-error-400)",
+              fontFamily: "var(--font-family-body)",
+            }}
           >
             {errors.email.message}
           </p>
         )}
       </div>
 
-      {/* Password */}
+      {/* Password - Enhanced spacing and touch targets */}
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium mb-2"
-          style={{ color: "var(--color-grey-700)" }}
+          style={{
+            display: "block",
+            fontSize: "var(--font-size-small)",
+            fontWeight: "var(--font-weight-semibold)",
+            color: "var(--color-grey-700)",
+            marginBottom: "var(--space-2)",
+            fontFamily: "var(--font-family-body)",
+          }}
         >
           Password
         </label>
@@ -156,7 +201,7 @@ function TutorLoginFormInner() {
           type="password"
           {...register("password")}
           disabled={isLoading}
-          className="w-full px-4 py-3 rounded-lg border transition-colors"
+          className="w-full border transition-colors"
           style={{
             borderColor: errors.password
               ? "var(--color-error-300)"
@@ -164,35 +209,65 @@ function TutorLoginFormInner() {
             backgroundColor: "var(--color-grey-50)",
             fontSize: "var(--font-size-body)",
             fontFamily: "var(--font-family-body)",
+            padding: "var(--space-3) var(--space-4)",
+            borderRadius: "var(--radius-md)",
+            height: "var(--space-12)",
+            outline: "none",
+            transition: "all var(--transition-fast)",
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = "var(--color-navy-500)";
+            e.currentTarget.style.backgroundColor = "white";
+          }}
+          onBlur={(e) => {
+            if (!errors.password) {
+              e.currentTarget.style.borderColor = "var(--color-grey-300)";
+              e.currentTarget.style.backgroundColor = "var(--color-grey-50)";
+            }
           }}
           placeholder="Enter your password"
         />
         {errors.password && (
           <p
-            className="mt-1 text-sm"
-            style={{ color: "var(--color-error-400)" }}
+            style={{
+              marginTop: "var(--space-2)",
+              fontSize: "var(--font-size-small)",
+              color: "var(--color-error-400)",
+              fontFamily: "var(--font-family-body)",
+            }}
           >
             {errors.password.message}
           </p>
         )}
       </div>
 
-      {/* Forgot Password Link */}
-      <div className="text-right">
+      {/* Forgot Password Link - Enhanced with hover state */}
+      <div style={{ textAlign: "right" }}>
         <a
           href="#"
-          className="text-sm font-medium"
-          style={{ color: "var(--color-navy-500)" }}
+          style={{
+            fontSize: "var(--font-size-small)",
+            fontWeight: "var(--font-weight-medium)",
+            color: "var(--color-navy-500)",
+            fontFamily: "var(--font-family-body)",
+            textDecoration: "none",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = "underline";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = "none";
+          }}
         >
           Forgot password?
         </a>
       </div>
 
-      {/* Submit Button */}
+      {/* Submit Button - Enhanced with proper height and hover states */}
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full py-3 px-6 rounded-lg font-medium transition-all"
+        className="w-full transition-all"
         style={{
           backgroundColor: isLoading
             ? "var(--color-navy-300)"
@@ -200,22 +275,53 @@ function TutorLoginFormInner() {
           color: "white",
           fontSize: "var(--font-size-body)",
           fontFamily: "var(--font-family-body)",
+          fontWeight: "var(--font-weight-semibold)",
           cursor: isLoading ? "not-allowed" : "pointer",
+          padding: "var(--space-3) var(--space-6)",
+          borderRadius: "var(--radius-md)",
+          border: "none",
+          height: "var(--space-12)",
+          transition: "all var(--transition-fast)",
+        }}
+        onMouseEnter={(e) => {
+          if (!isLoading) {
+            e.currentTarget.style.backgroundColor = "var(--color-navy-600)";
+            e.currentTarget.style.boxShadow = "var(--shadow-md)";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isLoading) {
+            e.currentTarget.style.backgroundColor = "var(--color-navy-500)";
+            e.currentTarget.style.boxShadow = "none";
+          }
         }}
       >
         {isLoading ? "Logging in..." : "Log In"}
       </button>
 
-      {/* Signup Link */}
+      {/* Signup Link - Enhanced spacing and sizing */}
       <p
-        className="text-center text-sm"
-        style={{ color: "var(--color-grey-600)" }}
+        className="text-center"
+        style={{
+          fontSize: "var(--font-size-small)",
+          color: "var(--color-grey-600)",
+          fontFamily: "var(--font-family-body)",
+        }}
       >
         Don't have an account?{" "}
         <a
           href="/tutor/signup"
-          className="font-medium"
-          style={{ color: "var(--color-navy-500)" }}
+          style={{
+            color: "var(--color-navy-500)",
+            fontWeight: "var(--font-weight-medium)",
+            textDecoration: "none",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = "underline";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = "none";
+          }}
         >
           Sign up
         </a>

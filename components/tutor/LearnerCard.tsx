@@ -1,6 +1,16 @@
+"use client";
+
 /**
  * Learner Card Component
  * Displays learner information on tutor dashboard
+ *
+ * UI REDESIGN CHANGES:
+ * - Used explicit spacing tokens (--space-6, --space-4, --space-3)
+ * - Used explicit radius tokens (--radius-lg for card, --radius-pill for badges/icon)
+ * - Increased icon size for better visibility (56px, child-friendly)
+ * - Improved spacing rhythm for better hierarchy
+ * - Enhanced button with hover states
+ * - Better status badge styling with explicit tokens
  */
 
 import Link from "next/link";
@@ -55,65 +65,92 @@ export function LearnerCard({ learner }: LearnerCardProps) {
 
   return (
     <div
-      className="rounded-lg p-6 transition-all hover:shadow-lg"
+      className="transition-all"
       style={{
         backgroundColor: "white",
         boxShadow: "var(--shadow-md)",
         border: "1px solid var(--color-grey-200)",
+        borderRadius: "var(--radius-lg)",
+        padding: "var(--space-6)",
+        transition: "all var(--transition-fast)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = "var(--shadow-lg)";
+        e.currentTarget.style.transform = "translateY(-4px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = "var(--shadow-md)";
+        e.currentTarget.style.transform = "translateY(0)";
       }}
     >
-      {/* Learner Name */}
-      <div className="flex items-start justify-between mb-4">
+      {/* Learner Name and Icon - Enhanced spacing */}
+      <div
+        className="flex items-start justify-between"
+        style={{ marginBottom: "var(--space-5)" }}
+      >
         <div>
           <h3
             style={{
-              fontSize: "var(--font-size-h3)",
+              fontSize: "var(--font-size-h4)",
               fontFamily: "var(--font-family-body)",
               fontWeight: "var(--font-weight-semibold)",
               color: "var(--color-navy-800)",
-              marginBottom: "var(--space-2)",
+              marginBottom: "var(--space-3)",
             }}
           >
             {learner.displayName}
           </h3>
 
-          {/* Status Badge */}
+          {/* Status Badge - Enhanced with explicit tokens */}
           <span
-            className="inline-block px-3 py-1 rounded-full text-sm font-medium"
+            className="inline-block"
             style={{
               backgroundColor: colors.bg,
               color: colors.text,
               border: `1px solid ${colors.border}`,
               fontSize: "var(--font-size-small)",
+              fontFamily: "var(--font-family-body)",
+              fontWeight: "var(--font-weight-medium)",
+              padding: "var(--space-1) var(--space-3)",
+              borderRadius: "var(--radius-pill)",
             }}
           >
             {statusLabels[status]}
           </span>
         </div>
 
-        {/* Icon Placeholder */}
+        {/* Icon - Larger for better visibility */}
         <div
-          className="rounded-full flex items-center justify-center"
+          className="flex items-center justify-center"
           style={{
-            width: "48px",
-            height: "48px",
+            width: "56px",
+            height: "56px",
             backgroundColor: "var(--color-peach-100)",
             color: "var(--color-peach-600)",
-            fontSize: "24px",
+            borderRadius: "var(--radius-pill)",
+            fontSize: "28px",
           }}
         >
           👤
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats - Enhanced spacing */}
       {learner.currentCycle ? (
-        <div className="space-y-2 mb-4">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--space-3)",
+            marginBottom: "var(--space-5)",
+          }}
+        >
           <div className="flex justify-between items-center">
             <span
               style={{
                 fontSize: "var(--font-size-small)",
                 color: "var(--color-grey-600)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               This Week
@@ -123,6 +160,7 @@ export function LearnerCard({ learner }: LearnerCardProps) {
                 fontSize: "var(--font-size-body)",
                 fontWeight: "var(--font-weight-semibold)",
                 color: "var(--color-navy-800)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               {learner.currentCycle.tasksCompleted} of{" "}
@@ -134,6 +172,7 @@ export function LearnerCard({ learner }: LearnerCardProps) {
               style={{
                 fontSize: "var(--font-size-small)",
                 color: "var(--color-grey-600)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               Points
@@ -143,6 +182,7 @@ export function LearnerCard({ learner }: LearnerCardProps) {
                 fontSize: "var(--font-size-body)",
                 fontWeight: "var(--font-weight-semibold)",
                 color: "var(--color-peach-600)",
+                fontFamily: "var(--font-family-body)",
               }}
             >
               {learner.currentCycle.pointsThisWeek} pts
@@ -151,40 +191,57 @@ export function LearnerCard({ learner }: LearnerCardProps) {
         </div>
       ) : (
         <div
-          className="mb-4 text-center py-3"
+          className="text-center"
           style={{
             fontSize: "var(--font-size-small)",
             color: "var(--color-grey-500)",
+            fontFamily: "var(--font-family-body)",
+            padding: "var(--space-4) 0",
+            marginBottom: "var(--space-5)",
           }}
         >
           No active weekly cycle
         </div>
       )}
 
-      {/* Actions */}
-      <div className="flex gap-2">
+      {/* Actions - Enhanced button */}
+      <div>
         <Link
           href={`/tutor/learners/${learner.id}`}
-          className="flex-1 text-center py-2 px-4 rounded-lg transition-colors"
+          className="flex-1 text-center transition-colors"
           style={{
             backgroundColor: "var(--color-navy-500)",
             color: "white",
             fontSize: "var(--font-size-small)",
             fontFamily: "var(--font-family-body)",
-            fontWeight: "var(--font-weight-medium)",
+            fontWeight: "var(--font-weight-semibold)",
+            padding: "var(--space-2) var(--space-4)",
+            borderRadius: "var(--radius-md)",
+            textDecoration: "none",
+            display: "block",
+            transition: "all var(--transition-fast)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--color-navy-600)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--color-navy-500)";
           }}
         >
           View Details
         </Link>
       </div>
 
-      {/* Total Points */}
+      {/* Total Points - Enhanced spacing */}
       <div
-        className="mt-4 pt-4 text-center"
+        className="text-center"
         style={{
           borderTop: "1px solid var(--color-grey-200)",
           fontSize: "var(--font-size-caption)",
           color: "var(--color-grey-500)",
+          fontFamily: "var(--font-family-body)",
+          marginTop: "var(--space-5)",
+          paddingTop: "var(--space-4)",
         }}
       >
         Total: {learner.totalPoints} lifetime points

@@ -15,8 +15,8 @@
   - Shadow Port: 51218
 
 - **Web Server**: Next.js 16.1.1 (Turbopack)
-  - Local URL: http://localhost:3001
-  - Network URL: http://192.168.1.46:3001
+  - Local URL: http://localhost:3002
+  - Network URL: http://192.168.1.46:3002
 
 - **Node Version**: (system default)
 - **Package Manager**: npm
@@ -84,7 +84,7 @@
 
 ### 5. Database Connection Test ✅
 
-**Test URL**: http://localhost:3001/api/test
+**Test URL**: http://localhost:3002/api/test
 
 **Response**:
 ```json
@@ -112,7 +112,7 @@
 **Command**: `npm run dev`
 
 **Result**: SUCCESS
-- Server started on http://localhost:3001 (port 3000 in use)
+- Server started on http://localhost:3002 (port 3000 in use)
 - Turbopack compilation working
 - Environment variables loaded from `.env`
 - Hot module replacement functional
@@ -120,7 +120,7 @@
 
 ### 7. Homepage Load Test ✅
 
-**URL**: http://localhost:3001/
+**URL**: http://localhost:3002/
 
 **Result**: SUCCESS
 - Page loads correctly
@@ -156,7 +156,7 @@
 ```bash
 DATABASE_URL="postgres://postgres:postgres@localhost:51217/template1?sslmode=disable"
 NEXTAUTH_SECRET="change-this-to-a-random-secret-in-production"
-NEXTAUTH_URL="http://localhost:3001"
+NEXTAUTH_URL="http://localhost:3002"
 ```
 
 ### prisma.config.ts
@@ -202,9 +202,9 @@ npm install --cache /tmp/npm-cache-temp
 ### Issue 3: Port 3000 Already in Use
 **Problem**: Next.js couldn't bind to default port 3000
 
-**Solution**: Next.js automatically selected port 3001
+**Solution**: Updated package.json to use port 3002 with -p flag
 
-**Status**: RESOLVED (no action needed)
+**Status**: RESOLVED
 
 ---
 
@@ -313,7 +313,7 @@ npx prisma generate
 npm run dev
 
 # Test database connection
-curl http://localhost:3001/api/test | python3 -m json.tool
+curl http://localhost:3002/api/test | python3 -m json.tool
 
 # View migration history
 npx prisma migrate status

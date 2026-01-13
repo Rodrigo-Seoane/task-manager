@@ -1,0 +1,19 @@
+/* Dashboard Page Styles */
+.addLearnerButton {
+  transition: all var(--transition-fast);
+}
+
+.addLearnerButton:hover {
+  background-color: var(--color-peach-600) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+.emptyStateButton {
+  transition: all var(--transition-fast);
+}
+
+.emptyStateButton:hover {
+  background-color: var(--color-navy-600) !important;
+  box-shadow: var(--shadow-md) !important;
+}
