@@ -23,29 +23,6 @@ const CreateWeeklyCycleSchema = z.object({
 // ============================================================================
 
 /**
- * Get the next Monday from today
- */
-function getNextMonday(): Date {
-  const today = new Date();
-  const dayOfWeek = today.getDay();
-  const daysUntilMonday = dayOfWeek === 0 ? 1 : 8 - dayOfWeek;
-  const nextMonday = new Date(today);
-  nextMonday.setDate(today.getDate() + daysUntilMonday);
-  nextMonday.setHours(0, 0, 0, 0);
-  return nextMonday;
-}
-
-/**
- * Get the Sunday following a given Monday
- */
-function getFollowingSunday(monday: Date): Date {
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  sunday.setHours(23, 59, 59, 999);
-  return sunday;
-}
-
-/**
  * Check if a date is a Monday
  */
 function isMonday(date: Date): boolean {

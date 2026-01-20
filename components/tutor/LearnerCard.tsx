@@ -26,6 +26,7 @@ interface LearnerCardProps {
       totalTasks: number;
       pointsThisWeek: number;
     } | null;
+    pendingCompletions?: number;
   };
 }
 
@@ -205,7 +206,42 @@ export function LearnerCard({ learner }: LearnerCardProps) {
       )}
 
       {/* Actions - Enhanced button */}
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--space-2)",
+        }}
+      >
+        {/* Review Tasks Button - Show when there are pending completions */}
+        {(learner.pendingCompletions ?? 0) > 0 && (
+          <Link
+            href={`/tutor/review/${learner.id}`}
+            className="flex-1 text-center transition-colors"
+            style={{
+              backgroundColor: "var(--color-warning-100)",
+              color: "var(--color-warning-400)",
+              border: "1px solid var(--color-warning-300)",
+              fontSize: "var(--font-size-small)",
+              fontFamily: "var(--font-family-body)",
+              fontWeight: "var(--font-weight-semibold)",
+              padding: "var(--space-2) var(--space-4)",
+              borderRadius: "var(--radius-md)",
+              textDecoration: "none",
+              display: "block",
+              transition: "all var(--transition-fast)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--color-warning-200)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--color-warning-100)";
+            }}
+          >
+            ⭐ Review Tasks ({learner.pendingCompletions})
+          </Link>
+        )}
+
         <Link
           href={`/tutor/weekly-tasks/${learner.id}`}
           className="flex-1 text-center transition-colors"

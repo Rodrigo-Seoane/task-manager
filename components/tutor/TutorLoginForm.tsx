@@ -308,7 +308,7 @@ function TutorLoginFormInner() {
           fontFamily: "var(--font-family-body)",
         }}
       >
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <a
           href="/tutor/signup"
           style={{

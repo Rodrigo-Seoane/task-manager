@@ -11,6 +11,16 @@ import { Navigation } from "@/components/tutor/Navigation";
 import { AddTaskClient } from "@/components/tutor/AddTaskClient";
 import Link from "next/link";
 
+// Type for learner with weekly cycles
+type LearnerWithCycles = {
+  id: string;
+  displayName: string;
+  weeklyCycles: {
+    id: string;
+    status: "DRAFT" | "ACTIVE" | "REVIEW" | "COMPLETED";
+  }[];
+};
+
 interface PageProps {
   params: Promise<{
     learnerId: string;
@@ -29,7 +39,7 @@ export default async function AddTaskPage({ params }: PageProps) {
   const { learnerId } = await params;
 
   // Fetch learner and verify ownership
-  const learner = await prisma.learner.findFirst({
+  const learnerQuery = await prisma.learner.findFirst({
     where: {
       id: learnerId,
       tutorId,
@@ -47,12 +57,13 @@ export default async function AddTaskPage({ params }: PageProps) {
         take: 1,
       },
     },
-  });
+  }) as LearnerWithCycles | null;
 
-  if (!learner) {
+  if (!learnerQuery) {
     redirect("/tutor/dashboard");
   }
 
+  const learner = learnerQuery;
   const currentCycle = learner.weeklyCycles?.[0] || null;
 
   // Redirect if no cycle or cycle is locked

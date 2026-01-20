@@ -186,7 +186,7 @@ export function IconPicker({ selectedIcon, onSelectIcon }: IconPickerProps) {
               color: "var(--color-grey-500)",
             }}
           >
-            No icons found for "{searchTerm}"
+            No icons found for &quot;{searchTerm}&quot;
           </p>
         </div>
       )}

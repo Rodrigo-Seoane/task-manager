@@ -21,7 +21,8 @@ const TutorLoginSchema = z.object({
 });
 
 const LearnerLoginSchema = z.object({
-  learnerId: z.string().uuid(),
+  tutorEmail: z.string().email(),
+  learnerName: z.string().min(1),
   pin: z.string().length(4).regex(/^\d{4}$/),
   userType: z.literal("learner"),
 });
@@ -81,7 +82,8 @@ export default {
       id: "learner",
       name: "Learner Login",
       credentials: {
-        learnerId: { type: "text" },
+        tutorEmail: { label: "Tutor Email", type: "email" },
+        learnerName: { label: "Learner Name", type: "text" },
         pin: { label: "PIN", type: "password" },
         userType: { type: "hidden" },
       },
@@ -92,10 +94,27 @@ export default {
           return null;
         }
 
-        const { learnerId, pin } = validatedFields.data;
+        const { tutorEmail, learnerName, pin } = validatedFields.data;
 
-        const learner = await prisma.learner.findUnique({
-          where: { id: learnerId },
+        // Find the tutor by email first
+        const tutor = await prisma.tutor.findUnique({
+          where: { email: tutorEmail },
+          select: { id: true },
+        });
+
+        if (!tutor) {
+          return null;
+        }
+
+        // Find the learner by name within this tutor's learners
+        const learner = await prisma.learner.findFirst({
+          where: {
+            tutorId: tutor.id,
+            displayName: {
+              equals: learnerName,
+              mode: "insensitive", // Case-insensitive match
+            },
+          },
           select: {
             id: true,
             displayName: true,
@@ -109,7 +128,6 @@ export default {
         }
 
         // Direct PIN comparison (stored as plain text, 4 digits only)
-        // Note: For production, consider hashing PINs as well
         if (pin !== learner.pinCode) {
           return null;
         }
@@ -128,7 +146,7 @@ export default {
       if (user) {
         token.id = user.id;
         token.role = user.role;
-        if (user.role === "learner") {
+        if (user.role === "learner" && "tutorId" in user) {
           token.tutorId = user.tutorId;
         }
       }

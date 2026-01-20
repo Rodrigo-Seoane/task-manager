@@ -107,7 +107,7 @@ export default function Home() {
 
           {/* Learner Card - Enhanced with better hover states and spacing */}
           <Link
-            href="/learner/select"
+            href="/learner/login"
             className={styles.portalCard}
             style={{
               backgroundColor: "white",
@@ -164,7 +164,7 @@ export default function Home() {
               fontFamily: "var(--font-family-body)",
             }}
           >
-            Phase 2: Tutor Onboarding Complete
+            Phase 4: Learner Experience Complete
           </p>
         </div>
       </div>

@@ -13,6 +13,29 @@ import { Navigation } from "@/components/tutor/Navigation";
 import { WeeklyTasksClient } from "@/components/tutor/WeeklyTasksClient";
 import Link from "next/link";
 
+// Type for learner with weekly cycles and tasks
+type LearnerWithCyclesAndTasks = {
+  id: string;
+  displayName: string;
+  weeklyCycles: {
+    id: string;
+    status: "DRAFT" | "ACTIVE" | "REVIEW" | "COMPLETED";
+    startDate: Date;
+    endDate: Date;
+    tasks: {
+      id: string;
+      title: string;
+      description: string | null;
+      iconName: string | null;
+      pointValue: number;
+      frequencyPerWeek: number;
+      isBossTask: boolean;
+      expectation: string | null;
+      createdAt: Date;
+    }[];
+  }[];
+};
+
 interface PageProps {
   params: Promise<{
     learnerId: string;
@@ -31,7 +54,7 @@ export default async function WeeklyTasksPage({ params }: PageProps) {
   const { learnerId } = await params;
 
   // Fetch learner and verify ownership
-  const learner = await prisma.learner.findFirst({
+  const learnerQuery = await prisma.learner.findFirst({
     where: {
       id: learnerId,
       tutorId,
@@ -56,12 +79,13 @@ export default async function WeeklyTasksPage({ params }: PageProps) {
         },
       },
     },
-  });
+  }) as LearnerWithCyclesAndTasks | null;
 
-  if (!learner) {
+  if (!learnerQuery) {
     redirect("/tutor/dashboard");
   }
 
+  const learner = learnerQuery;
   let currentCycle = learner.weeklyCycles?.[0] || null;
 
   // Create a new DRAFT cycle if none exists
@@ -100,7 +124,7 @@ export default async function WeeklyTasksPage({ params }: PageProps) {
   // Calculate total completions needed
   const totalCompletionsNeeded = tasks
     .filter((task) => !task.isBossTask)
-    .reduce((sum: number, task: any) => sum + task.frequencyPerWeek, 0);
+    .reduce((sum: number, task: { frequencyPerWeek: number }) => sum + task.frequencyPerWeek, 0);
 
   return (
     <div
@@ -195,7 +219,7 @@ export default async function WeeklyTasksPage({ params }: PageProps) {
                 margin: 0,
               }}
             >
-              ⚠️ Tasks are locked for this week. You can edit next week's tasks
+              ⚠️ Tasks are locked for this week. You can edit next week&apos;s tasks
               or end this week early.
             </p>
           </div>

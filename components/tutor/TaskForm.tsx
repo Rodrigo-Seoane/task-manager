@@ -355,7 +355,7 @@ export function TaskForm({ weeklyCycleId, onSuccess, onCancel, learnerId }: Task
             fontFamily: "var(--font-family-body)",
           }}
         >
-          Help your learner know what "done" means (max 200 characters)
+          Help your learner know what &quot;done&quot; means (max 200 characters)
         </p>
       </div>
 

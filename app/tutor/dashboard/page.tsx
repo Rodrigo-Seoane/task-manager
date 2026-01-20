@@ -20,6 +20,32 @@ import { LearnerCard } from "@/components/tutor/LearnerCard";
 import Link from "next/link";
 import styles from "./page.module.css";
 
+// Type for tutor with nested learners and cycles
+type TutorWithLearners = {
+  id: string;
+  fullName: string;
+  email: string;
+  learners: {
+    id: string;
+    displayName: string;
+    totalPoints: number;
+    weeklyCycles: {
+      id: string;
+      status: "DRAFT" | "ACTIVE" | "REVIEW" | "COMPLETED";
+      tasks: {
+        id: string;
+        frequencyPerWeek: number;
+        pointValue: number;
+        completions: {
+          id: string;
+          pointsAwarded: number;
+          tutorApproved: boolean | null;
+        }[];
+      }[];
+    }[];
+  }[];
+};
+
 export default async function TutorDashboardPage() {
   const session = await auth();
 
@@ -29,7 +55,7 @@ export default async function TutorDashboardPage() {
   }
 
   // Fetch tutor with learners
-  const tutor = await prisma.tutor.findUnique({
+  const tutorQuery = await prisma.tutor.findUnique({
     where: { id: session.user.id },
     select: {
       id: true,
@@ -65,6 +91,7 @@ export default async function TutorDashboardPage() {
                     select: {
                       id: true,
                       pointsAwarded: true,
+                      tutorApproved: true,
                     },
                   },
                 },
@@ -74,11 +101,13 @@ export default async function TutorDashboardPage() {
         },
       },
     },
-  });
+  }) as TutorWithLearners | null;
 
-  if (!tutor) {
+  if (!tutorQuery) {
     redirect("/tutor/login");
   }
+
+  const tutor = tutorQuery;
 
   // Transform learner data for cards
   const learners = tutor.learners.map((learner) => {
@@ -90,6 +119,7 @@ export default async function TutorDashboardPage() {
         displayName: learner.displayName,
         totalPoints: learner.totalPoints,
         currentCycle: null,
+        pendingCompletions: 0,
       };
     }
 
@@ -109,6 +139,13 @@ export default async function TutorDashboardPage() {
       0
     );
 
+    // Count pending completions (tutorApproved === null)
+    const pendingCompletions = currentCycle.tasks.reduce(
+      (sum, task) =>
+        sum + task.completions.filter((c) => c.tutorApproved === null).length,
+      0
+    );
+
     return {
       id: learner.id,
       displayName: learner.displayName,
@@ -119,6 +156,7 @@ export default async function TutorDashboardPage() {
         totalTasks,
         pointsThisWeek,
       },
+      pendingCompletions,
     };
   });
 

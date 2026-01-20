@@ -22,8 +22,7 @@ export function middleware(req: NextRequest) {
     "/",
     "/tutor/login",
     "/tutor/signup",
-    "/learner/select",
-    "/learner/pin",
+    "/learner/login",
     "/styleguide",
     "/api/",
   ];
@@ -42,8 +41,8 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
     if (pathname.startsWith("/learner/")) {
-      const selectUrl = new URL("/learner/select", req.url);
-      return NextResponse.redirect(selectUrl);
+      const loginUrl = new URL("/learner/login", req.url);
+      return NextResponse.redirect(loginUrl);
     }
   }
 

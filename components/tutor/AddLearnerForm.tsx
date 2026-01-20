@@ -141,7 +141,7 @@ export function AddLearnerForm() {
             fontFamily: "var(--font-family-body)",
           }}
         >
-          Learner's Display Name
+          Learner&apos;s Display Name
         </label>
         <input
           id="displayName"
@@ -194,7 +194,7 @@ export function AddLearnerForm() {
             fontFamily: "var(--font-family-body)",
           }}
         >
-          This is how they'll see their name in the app
+          This is how they&apos;ll see their name in the app
         </p>
       </div>
 
