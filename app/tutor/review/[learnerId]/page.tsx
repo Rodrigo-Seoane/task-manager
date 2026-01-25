@@ -17,6 +17,7 @@ type LearnerWithCompletions = {
   displayName: string;
   weeklyCycles: {
     id: string;
+    status: "DRAFT" | "ACTIVE" | "REVIEW" | "COMPLETED";
     tasks: {
       id: string;
       title: string;
@@ -57,7 +58,9 @@ export default async function ReviewCompletionsPage({ params }: PageProps) {
     include: {
       weeklyCycles: {
         where: {
-          status: "ACTIVE",
+          status: {
+            in: ["ACTIVE", "REVIEW"],
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -163,35 +166,13 @@ export default async function ReviewCompletionsPage({ params }: PageProps) {
         </div>
 
         {/* Completions List */}
-        {pendingCompletions.length > 0 ? (
-          <ReviewCompletionsClient
-            completions={pendingCompletions}
-            learnerName={learner.displayName}
-          />
-        ) : (
-          <div
-            style={{
-              backgroundColor: "white",
-              borderRadius: "var(--radius-lg)",
-              padding: "var(--space-12)",
-              textAlign: "center",
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
-            <div style={{ fontSize: "48px", marginBottom: "var(--space-4)" }}>
-              ✅
-            </div>
-            <p
-              style={{
-                fontSize: "var(--font-size-h4)",
-                fontFamily: "var(--font-family-body)",
-                color: "var(--color-grey-600)",
-              }}
-            >
-              All caught up! No tasks to review.
-            </p>
-          </div>
-        )}
+        <ReviewCompletionsClient
+          completions={pendingCompletions}
+          learnerName={learner.displayName}
+          learnerId={learner.id}
+          cycleId={currentCycle?.id}
+          cycleStatus={currentCycle?.status}
+        />
       </main>
     </div>
   );

@@ -15,6 +15,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { transitionWeeklyCycles } from "@/lib/weekly-cycle";
 import { Navigation } from "@/components/tutor/Navigation";
 import { LearnerCard } from "@/components/tutor/LearnerCard";
 import Link from "next/link";
@@ -53,6 +54,10 @@ export default async function TutorDashboardPage() {
   if (!session || session.user.role !== "tutor") {
     redirect("/tutor/login");
   }
+
+  // Phase 5.1: Transition expired ACTIVE cycles to REVIEW status
+  // Called on dashboard load (temporary for MVP, later move to cron job)
+  await transitionWeeklyCycles();
 
   // Fetch tutor with learners
   const tutorQuery = await prisma.tutor.findUnique({
