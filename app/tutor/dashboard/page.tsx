@@ -10,6 +10,10 @@
  * - Added hover state for primary CTA button
  * - Improved grid gap for better visual separation
  * - Enhanced empty state with larger icon and better spacing
+ *
+ * Phase 6 CHANGES:
+ * - Added TutorDashboardClient wrapper for wizard message
+ * - Fetches onboardingCompleted status
  */
 
 import { redirect } from "next/navigation";
@@ -18,6 +22,7 @@ import { prisma } from "@/lib/prisma";
 import { transitionWeeklyCycles } from "@/lib/weekly-cycle";
 import { Navigation } from "@/components/tutor/Navigation";
 import { LearnerCard } from "@/components/tutor/LearnerCard";
+import { TutorDashboardClient } from "@/components/tutor/TutorDashboardClient";
 import Link from "next/link";
 import styles from "./page.module.css";
 
@@ -26,6 +31,7 @@ type TutorWithLearners = {
   id: string;
   fullName: string;
   email: string;
+  onboardingCompleted: boolean;
   learners: {
     id: string;
     displayName: string;
@@ -66,6 +72,7 @@ export default async function TutorDashboardPage() {
       id: true,
       fullName: true,
       email: true,
+      onboardingCompleted: true,
       learners: {
         select: {
           id: true,
@@ -168,16 +175,20 @@ export default async function TutorDashboardPage() {
   const hasLearners = learners.length > 0;
   const canAddMore = learners.length < 4;
 
-  return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--color-mist-50)" }}
-    >
-      {/* Navigation */}
-      <Navigation tutorName={tutor.fullName} />
+  // Phase 6: Show welcome wizard if onboarding not completed
+  const showWelcome = !tutor.onboardingCompleted;
 
-      {/* Main Content - Enhanced spacing */}
-      <main
+  return (
+    <TutorDashboardClient showWelcome={showWelcome}>
+      <div
+        className="min-h-screen"
+        style={{ backgroundColor: "var(--color-mist-50)" }}
+      >
+        {/* Navigation */}
+        <Navigation tutorName={tutor.fullName} />
+
+        {/* Main Content - Enhanced spacing */}
+        <main
         className="max-w-7xl mx-auto"
         style={{
           padding: "var(--space-10) var(--space-6)",
@@ -310,7 +321,8 @@ export default async function TutorDashboardPage() {
             </Link>
           </div>
         )}
-      </main>
-    </div>
+        </main>
+      </div>
+    </TutorDashboardClient>
   );
 }

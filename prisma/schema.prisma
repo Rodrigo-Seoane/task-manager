@@ -13,12 +13,13 @@ datasource db {
 // TUTOR MODEL
 // ============================================================================
 model Tutor {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  passwordHash  String    @map("password_hash")
-  fullName      String    @map("full_name")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id                    String    @id @default(uuid())
+  email                 String    @unique
+  passwordHash          String    @map("password_hash")
+  fullName              String    @map("full_name")
+  onboardingCompleted   Boolean   @default(false) @map("onboarding_completed") // Phase 6: Track if welcome wizard shown
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
 
   // Relations
   learners      Learner[]
@@ -30,13 +31,14 @@ model Tutor {
 // LEARNER MODEL (SIMPLIFIED - No profile_type, No current_level)
 // ============================================================================
 model Learner {
-  id           String    @id @default(uuid())
-  tutorId      String    @map("tutor_id")
-  displayName  String    @map("display_name")
-  pinCode      String    @map("pin_code") // 4 digits, stored as string
-  totalPoints  Int       @default(0) @map("total_points")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  id                    String    @id @default(uuid())
+  tutorId               String    @map("tutor_id")
+  displayName           String    @map("display_name")
+  pinCode               String    @map("pin_code") // 4 digits, stored as string
+  totalPoints           Int       @default(0) @map("total_points")
+  onboardingCompleted   Boolean   @default(false) @map("onboarding_completed") // Phase 6: Track if first login wizard shown
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
 
   // Relations
   tutor             Tutor             @relation(fields: [tutorId], references: [id], onDelete: Cascade)

@@ -2,6 +2,7 @@
  * Learner Dashboard Page
  * Route: /learner/dashboard
  * Phase 4.2 - Learner Dashboard Core
+ * Phase 6 - Added onboarding status for first login wizard
  */
 
 import { redirect } from "next/navigation";
@@ -35,6 +36,7 @@ export default async function LearnerDashboardPage() {
       id: true,
       displayName: true,
       totalPoints: true,
+      onboardingCompleted: true, // Phase 6: Check if first login wizard was shown
     },
   });
 
@@ -122,6 +124,9 @@ export default async function LearnerDashboardPage() {
     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
   });
 
+  // Phase 6: Check if first login wizard should be shown
+  const showFirstLoginWizard = !learner.onboardingCompleted;
+
   return (
     <LearnerDashboardClient
       learner={{
@@ -129,6 +134,7 @@ export default async function LearnerDashboardPage() {
         displayName: learner.displayName,
         totalPoints: learner.totalPoints,
       }}
+      showFirstLoginWizard={showFirstLoginWizard}
       regularTasks={sortedRegularTasks.map((task) => ({
         id: task.id,
         title: task.title,

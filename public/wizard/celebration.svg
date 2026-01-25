@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Tony the Game Wizard - Celebration Pose -->
+  <!-- Used for: Boss task unlock, achievements, milestones -->
+
+  <!-- Background circle with golden glow -->
+  <circle cx="100" cy="100" r="95" fill="#FFD700" opacity="0.15"/>
+  <circle cx="100" cy="100" r="85" fill="#254696" opacity="0.1"/>
+
+  <!-- Confetti pieces -->
+  <rect x="25" y="30" width="8" height="8" fill="#FFD700" transform="rotate(45 29 34)">
+    <animate attributeName="y" values="30;180" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="55" y="20" width="6" height="6" fill="#F5A06C" transform="rotate(30 58 23)">
+    <animate attributeName="y" values="20;190" dur="2.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0" dur="2.2s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="140" y="25" width="7" height="7" fill="#FFD700" transform="rotate(60 143.5 28.5)">
+    <animate attributeName="y" values="25;185" dur="1.8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0" dur="1.8s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="170" y="35" width="6" height="6" fill="#9DD35F" transform="rotate(15 173 38)">
+    <animate attributeName="y" values="35;195" dur="2.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0" dur="2.4s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Robe/Body -->
+  <path d="M60 130 Q50 180 55 195 L145 195 Q150 180 140 130 Q100 140 60 130" fill="#254696"/>
+
+  <!-- Robe stars decoration (more prominent for celebration) -->
+  <circle cx="75" cy="160" r="4" fill="#FFD700"/>
+  <circle cx="95" cy="175" r="3" fill="#FFD700"/>
+  <circle cx="120" cy="155" r="4" fill="#FFD700"/>
+  <circle cx="130" cy="180" r="3" fill="#FFD700"/>
+  <circle cx="85" cy="145" r="2" fill="#FFD700"/>
+
+  <!-- Head -->
+  <ellipse cx="100" cy="85" rx="35" ry="38" fill="#FFE4C4"/>
+
+  <!-- Wizard Hat -->
+  <path d="M55 75 L100 15 L145 75 Q100 85 55 75" fill="#254696"/>
+  <ellipse cx="100" cy="75" rx="45" ry="12" fill="#1E3878"/>
+  <!-- Hat stars -->
+  <circle cx="85" cy="55" r="5" fill="#FFD700"/>
+  <circle cx="115" cy="45" r="4" fill="#FFD700"/>
+  <circle cx="95" cy="35" r="3" fill="#FFD700"/>
+
+  <!-- Face -->
+  <!-- Eyes (squeezed happy) -->
+  <path d="M78 80 Q85 75 92 80" stroke="#1E3878" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M108 80 Q115 75 122 80" stroke="#1E3878" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- Big joyful smile -->
+  <path d="M78 100 Q100 125 122 100" stroke="#8B4513" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M82 102 Q100 118 118 102" fill="white"/>
+
+  <!-- Cheeks (very rosy for celebration) -->
+  <ellipse cx="68" cy="95" rx="12" ry="7" fill="#FFB6C1" opacity="0.7"/>
+  <ellipse cx="132" cy="95" rx="12" ry="7" fill="#FFB6C1" opacity="0.7"/>
+
+  <!-- White beard -->
+  <path d="M70 105 Q65 130 75 145 Q100 155 125 145 Q135 130 130 105 Q100 115 70 105" fill="white"/>
+  <path d="M85 145 Q90 165 100 170 Q110 165 115 145" fill="white"/>
+
+  <!-- Arms raised high in celebration -->
+  <!-- Left arm -->
+  <path d="M60 135 Q25 100 20 60" stroke="#254696" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <!-- Left hand with sparkles -->
+  <circle cx="18" cy="55" r="12" fill="#FFE4C4"/>
+
+  <!-- Right arm -->
+  <path d="M140 135 Q175 100 180 60" stroke="#254696" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <!-- Right hand with sparkles -->
+  <circle cx="182" cy="55" r="12" fill="#FFE4C4"/>
+
+  <!-- Magic bursts from hands -->
+  <circle cx="10" cy="40" r="8" fill="#FFD700">
+    <animate attributeName="r" values="6;10;6" dur="0.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.6;1" dur="0.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="190" cy="40" r="8" fill="#FFD700">
+    <animate attributeName="r" values="10;6;10" dur="0.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;1;0.6" dur="0.5s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Trophy between hands -->
+  <path d="M92 25 L92 15 L108 15 L108 25" fill="#FFD700"/>
+  <ellipse cx="100" cy="25" rx="12" ry="6" fill="#FFD700"/>
+  <rect x="96" y="31" width="8" height="10" fill="#FFD700"/>
+  <ellipse cx="100" cy="43" rx="10" ry="4" fill="#DAA520"/>
+  <circle cx="100" cy="22" r="4" fill="#FFF8DC" opacity="0.5"/>
+
+  <!-- Sparkles everywhere -->
+  <circle cx="30" cy="85" r="4" fill="#FFD700">
+    <animate attributeName="opacity" values="1;0.3;1" dur="0.6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="170" cy="85" r="4" fill="#FFD700">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="0.6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="50" cy="50" r="3" fill="#F5A06C">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="0.4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="150" cy="50" r="3" fill="#F5A06C">
+    <animate attributeName="opacity" values="1;0.5;1" dur="0.4s" repeatCount="indefinite"/>
+  </circle>
+</svg>

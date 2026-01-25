@@ -3,10 +3,16 @@
 /**
  * Waiting Client Component
  * Phase 4.2 - Shown when no ACTIVE cycle exists
+ * Phase 6 - Updated to use narrative constants
  */
 
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
+import {
+  getNarrativeMessage,
+  wizardImages,
+} from "@/lib/constants/narrative";
 
 interface WaitingClientProps {
   learnerName: string;
@@ -14,6 +20,9 @@ interface WaitingClientProps {
 
 export function WaitingClient({ learnerName }: WaitingClientProps) {
   const router = useRouter();
+
+  // Phase 6: Get narrative message
+  const { messages, buttonText, wizardPose } = getNarrativeMessage("noActiveWeek");
 
   const handleCheckAgain = () => {
     router.refresh();
@@ -43,21 +52,22 @@ export function WaitingClient({ learnerName }: WaitingClientProps) {
         textAlign: "center",
       }}
     >
-      {/* Wizard Avatar (relaxed pose) */}
+      {/* Wizard Avatar - Phase 6: Use wizard image */}
       <div
         style={{
           width: "120px",
           height: "120px",
-          borderRadius: "50%",
-          backgroundColor: "var(--color-navy-500)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "64px",
           marginBottom: "var(--space-8)",
         }}
       >
-        🧙
+        <Image
+          src={wizardImages[wizardPose]}
+          alt="Tony the Game Wizard"
+          width={120}
+          height={120}
+          style={{ objectFit: "contain" }}
+          priority
+        />
       </div>
 
       {/* Greeting */}
@@ -72,18 +82,32 @@ export function WaitingClient({ learnerName }: WaitingClientProps) {
         Hi, {learnerName}!
       </h1>
 
-      {/* Message */}
+      {/* Message - Phase 6: Use narrative messages */}
       <p
         style={{
           fontSize: "var(--font-size-h4)",
           fontFamily: "var(--font-family-body)",
           color: "var(--color-grey-600)",
-          marginBottom: "var(--space-8)",
+          marginBottom: "var(--space-4)",
           maxWidth: "400px",
         }}
       >
-        Your tutor is setting up your new week. Check back soon!
+        {messages[0]}
       </p>
+
+      {messages[1] && (
+        <p
+          style={{
+            fontSize: "var(--font-size-body)",
+            fontFamily: "var(--font-family-body)",
+            color: "var(--color-grey-500)",
+            marginBottom: "var(--space-8)",
+            maxWidth: "400px",
+          }}
+        >
+          {messages[1]}
+        </p>
+      )}
 
       {/* Illustration */}
       <div
@@ -105,6 +129,7 @@ export function WaitingClient({ learnerName }: WaitingClientProps) {
           maxWidth: "300px",
         }}
       >
+        {/* Phase 6: Use narrative button text */}
         <button
           onClick={handleCheckAgain}
           style={{
@@ -128,7 +153,7 @@ export function WaitingClient({ learnerName }: WaitingClientProps) {
             e.currentTarget.style.transform = "scale(1)";
           }}
         >
-          Check Again
+          {buttonText}
         </button>
 
         <button

@@ -3,21 +3,52 @@
 /**
  * Week Review Client Component
  * Phase 4.2 - Shown when weekly_cycle.status = REVIEW
+ * Phase 6 - Updated to use narrative constants
  */
 
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
+import {
+  type NarrativeMessageKey,
+  getNarrativeMessage,
+  wizardImages,
+} from "@/lib/constants/narrative";
 
 interface WeekReviewClientProps {
   learnerName: string;
   tasksCompleted: number;
+  totalTasks: number;
+  pointsEarned: number;
+  reached80Percent: boolean;
+  completedBossTasks: boolean;
 }
 
 export function WeekReviewClient({
   learnerName,
   tasksCompleted,
+  totalTasks,
+  pointsEarned,
+  reached80Percent,
+  completedBossTasks,
 }: WeekReviewClientProps) {
   const router = useRouter();
+
+  // Phase 6: Determine which narrative message to use
+  let messageKey: NarrativeMessageKey;
+  if (reached80Percent && completedBossTasks) {
+    messageKey = "weekReviewComplete80Plus";
+  } else if (reached80Percent && !completedBossTasks) {
+    messageKey = "weekReviewComplete80PlusNoBoss";
+  } else {
+    messageKey = "weekReviewCompleteBelow80";
+  }
+
+  const { messages, buttonText, wizardPose } = getNarrativeMessage(messageKey, {
+    points: pointsEarned,
+    completed: tasksCompleted,
+    total: totalTasks,
+  });
 
   const handleOkay = async () => {
     try {
@@ -43,21 +74,22 @@ export function WeekReviewClient({
         textAlign: "center",
       }}
     >
-      {/* Wizard Avatar */}
+      {/* Wizard Avatar - Phase 6: Use wizard image */}
       <div
         style={{
           width: "120px",
           height: "120px",
-          borderRadius: "50%",
-          backgroundColor: "var(--color-navy-500)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "64px",
           marginBottom: "var(--space-8)",
         }}
       >
-        🧙
+        <Image
+          src={wizardImages[wizardPose]}
+          alt="Tony the Game Wizard"
+          width={120}
+          height={120}
+          style={{ objectFit: "contain" }}
+          priority
+        />
       </div>
 
       {/* Greeting */}
@@ -72,7 +104,7 @@ export function WeekReviewClient({
         Great job, {learnerName}!
       </h1>
 
-      {/* Message */}
+      {/* Message - Phase 6: Use narrative messages */}
       <p
         style={{
           fontSize: "var(--font-size-h4)",
@@ -82,20 +114,22 @@ export function WeekReviewClient({
           maxWidth: "400px",
         }}
       >
-        Your tutor is reviewing your week!
+        {messages[0]}
       </p>
 
-      <p
-        style={{
-          fontSize: "var(--font-size-body)",
-          fontFamily: "var(--font-family-body)",
-          color: "var(--color-grey-500)",
-          marginBottom: "var(--space-8)",
-          maxWidth: "400px",
-        }}
-      >
-        Check back soon to see your final score.
-      </p>
+      {messages[1] && (
+        <p
+          style={{
+            fontSize: "var(--font-size-body)",
+            fontFamily: "var(--font-family-body)",
+            color: "var(--color-grey-500)",
+            marginBottom: "var(--space-8)",
+            maxWidth: "400px",
+          }}
+        >
+          {messages[1]}
+        </p>
+      )}
 
       {/* Illustration - Completed Tasks */}
       <div
@@ -127,11 +161,23 @@ export function WeekReviewClient({
             margin: 0,
           }}
         >
-          {tasksCompleted} task{tasksCompleted !== 1 ? "s" : ""} completed!
+          {tasksCompleted} of {totalTasks} tasks completed!
         </p>
+        {pointsEarned > 0 && (
+          <p
+            style={{
+              fontSize: "var(--font-size-body)",
+              fontFamily: "var(--font-family-body)",
+              color: "var(--color-grey-600)",
+              margin: 0,
+            }}
+          >
+            +{pointsEarned} points earned
+          </p>
+        )}
       </div>
 
-      {/* Okay Button */}
+      {/* Okay Button - Phase 6: Use narrative button text */}
       <button
         onClick={handleOkay}
         style={{
@@ -155,7 +201,7 @@ export function WeekReviewClient({
           e.currentTarget.style.transform = "scale(1)";
         }}
       >
-        Okay
+        {buttonText}
       </button>
     </div>
   );

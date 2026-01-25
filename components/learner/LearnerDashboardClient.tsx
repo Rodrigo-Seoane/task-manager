@@ -3,6 +3,7 @@
 /**
  * Learner Dashboard Client Component
  * Phase 4.2 - Learner Dashboard Core
+ * Phase 6 - Added first login wizard message
  * Integrates all learner components with state management
  */
 
@@ -16,6 +17,7 @@ import { TaskCompletionModal } from "./TaskCompletionModal";
 import { CompletionAnimation } from "./CompletionAnimation";
 import { BossUnlockCelebration } from "./BossUnlockCelebration";
 import { LockedBossTaskModal } from "./LockedBossTaskModal";
+import { WizardMessage } from "@/components/shared/WizardMessage";
 
 interface Task {
   id: string;
@@ -41,6 +43,7 @@ interface LearnerDashboardClientProps {
     bossUnlocked: boolean;
     tasksToUnlock: number;
   };
+  showFirstLoginWizard?: boolean; // Phase 6: Show first login tutorial
 }
 
 export function LearnerDashboardClient({
@@ -49,6 +52,7 @@ export function LearnerDashboardClient({
   bossTasks,
   completionsByTask: initialCompletions,
   progress: initialProgress,
+  showFirstLoginWizard = false,
 }: LearnerDashboardClientProps) {
   const router = useRouter();
   const [completionsByTask, setCompletionsByTask] = useState(initialCompletions);
@@ -64,6 +68,8 @@ export function LearnerDashboardClient({
   );
   const [logoutProgress, setLogoutProgress] = useState(0);
   const [completionError, setCompletionError] = useState<string | null>(null);
+  // Phase 6: First login wizard state
+  const [showFirstLogin, setShowFirstLogin] = useState(showFirstLoginWizard);
 
   const handleTaskClick = (task: Task) => {
     setSelectedTask(task);
@@ -432,6 +438,26 @@ export function LearnerDashboardClient({
           completed={progress.completed}
           total={progress.total}
           onDismiss={() => setShowLockedModal(false)}
+        />
+      )}
+
+      {/* Phase 6: First Login Tutorial Wizard */}
+      {showFirstLogin && (
+        <WizardMessage
+          messageKey="learnerFirstLogin"
+          variables={{ learner_name: learner.displayName }}
+          onDismiss={async () => {
+            // Mark onboarding as completed
+            try {
+              await fetch("/api/learner/onboarding", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+              });
+            } catch (error) {
+              console.error("[LEARNER_ONBOARDING_ERROR]", error);
+            }
+            setShowFirstLogin(false);
+          }}
         />
       )}
     </div>

@@ -3,10 +3,17 @@
 /**
  * Boss Unlock Celebration Component
  * Phase 4.4 - Boss Task Completion
+ * Phase 6 - Updated to use narrative constants
  * Celebration modal when boss tasks are unlocked at 80%
  */
 
 import { useMemo } from "react";
+import Image from "next/image";
+import {
+  getNarrativeMessage,
+  wizardImages,
+} from "@/lib/constants/narrative";
+import { MAX_BOSS_TASKS } from "@/lib/constants";
 
 interface BossUnlockCelebrationProps {
   onDismiss: () => void;
@@ -19,6 +26,12 @@ function seededRandom(seed: number) {
 }
 
 export function BossUnlockCelebration({ onDismiss }: BossUnlockCelebrationProps) {
+  // Phase 6: Get narrative message
+  const { messages, buttonText, wizardPose } = getNarrativeMessage(
+    "bossTaskUnlocked",
+    { max_boss_tasks: MAX_BOSS_TASKS }
+  );
+
   // Generate confetti pieces with useMemo (stable across renders)
   const confettiPieces = useMemo(() => {
     return Array.from({ length: 40 }, (_, i) => ({
@@ -83,21 +96,23 @@ export function BossUnlockCelebration({ onDismiss }: BossUnlockCelebrationProps)
           boxShadow: "0 0 60px rgba(255, 215, 0, 0.5)",
         }}
       >
-        {/* Wizard Avatar */}
+        {/* Wizard Avatar - Phase 6: Use wizard image */}
         <div
           style={{
             width: "100px",
             height: "100px",
-            borderRadius: "50%",
-            backgroundColor: "var(--color-navy-500)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "56px",
+            position: "relative",
             animation: "bounce 1s ease-in-out infinite",
           }}
         >
-          🧙
+          <Image
+            src={wizardImages[wizardPose]}
+            alt="Tony the Game Wizard celebrating"
+            width={100}
+            height={100}
+            style={{ objectFit: "contain" }}
+            priority
+          />
         </div>
 
         {/* Trophy */}
@@ -110,7 +125,7 @@ export function BossUnlockCelebration({ onDismiss }: BossUnlockCelebrationProps)
           🏆
         </div>
 
-        {/* Message */}
+        {/* Message - Phase 6: Use narrative messages */}
         <h2
           style={{
             fontSize: "var(--font-size-h2)",
@@ -119,21 +134,23 @@ export function BossUnlockCelebration({ onDismiss }: BossUnlockCelebrationProps)
             margin: 0,
           }}
         >
-          Amazing work!
+          {messages[0]}
         </h2>
 
-        <p
-          style={{
-            fontSize: "var(--font-size-h4)",
-            fontFamily: "var(--font-family-body)",
-            color: "var(--color-grey-600)",
-            margin: 0,
-          }}
-        >
-          You unlocked the Boss Tasks!
-        </p>
+        {messages[1] && (
+          <p
+            style={{
+              fontSize: "var(--font-size-h4)",
+              fontFamily: "var(--font-family-body)",
+              color: "var(--color-grey-600)",
+              margin: 0,
+            }}
+          >
+            {messages[1]}
+          </p>
+        )}
 
-        {/* Dismiss Button */}
+        {/* Dismiss Button - Phase 6: Use narrative button text */}
         <button
           onClick={onDismiss}
           style={{
@@ -158,7 +175,7 @@ export function BossUnlockCelebration({ onDismiss }: BossUnlockCelebrationProps)
             e.currentTarget.style.boxShadow = "none";
           }}
         >
-          Awesome!
+          {buttonText}
         </button>
       </div>
 

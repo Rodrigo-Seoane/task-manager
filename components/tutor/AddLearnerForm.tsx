@@ -13,6 +13,9 @@
  * - Enhanced button states with proper transitions and hover effects
  * - Used CSS variable for PIN font size (--font-size-h3) instead of hardcoded 24px
  * - Consistent with TutorLoginForm and TutorSignupForm patterns
+ *
+ * Phase 6 CHANGES:
+ * - Added WizardMessage for learner created narrative
  */
 
 import { useState } from "react";
@@ -20,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { WizardMessage } from "@/components/shared/WizardMessage";
 
 // ============================================================================
 // VALIDATION SCHEMA
@@ -52,6 +56,10 @@ export function AddLearnerForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
+  // Phase 6: Wizard message state
+  const [showWizard, setShowWizard] = useState(false);
+  const [createdLearnerName, setCreatedLearnerName] = useState("");
+  const [createdLearnerId, setCreatedLearnerId] = useState("");
 
   const {
     register,
@@ -99,9 +107,11 @@ export function AddLearnerForm() {
         return;
       }
 
-      // Redirect to dashboard
-      router.push("/tutor/dashboard");
-      router.refresh();
+      // Phase 6: Show wizard message instead of immediate redirect
+      setCreatedLearnerName(data.displayName);
+      setCreatedLearnerId(result.learner?.id || "");
+      setShowWizard(true);
+      setIsLoading(false);
     } catch (error) {
       console.error("[ADD_LEARNER_ERROR]", error);
       setServerError("An unexpected error occurred. Please try again.");
@@ -432,6 +442,23 @@ export function AddLearnerForm() {
           {isLoading ? "Creating Learner..." : "Create Learner"}
         </button>
       </div>
+
+      {/* Phase 6: Learner Created Wizard Message */}
+      {showWizard && (
+        <WizardMessage
+          messageKey="learnerCreated"
+          variables={{ learner_name: createdLearnerName }}
+          onDismiss={() => {
+            setShowWizard(false);
+            router.push("/tutor/dashboard");
+            router.refresh();
+          }}
+          onAction={() => {
+            // Navigate to create weekly tasks for this learner
+            router.push(`/tutor/weekly-tasks/${createdLearnerId}`);
+          }}
+        />
+      )}
     </form>
   );
 }
